@@ -37,13 +37,29 @@ describe('NEOCard', () => {
             expect(screen.getByRole('button')).toBeInTheDocument();
         });
 
-        it('renders button with favourite class if favourite', () => { // TODO: fix
-            neo['isFavorite'] = true;
-            console.log(neo);
+        it('renders successfully for hazardous asteroid', () => {
+            neo['is_potentially_hazardous_asteroid'] = true;
+            render(<NEOCard neo={neo} onToggleFavorite={toggleFavourite}/>)
+            expect(screen.getByText(/Hazardous: Yes/i)).toBeInTheDocument();
+        })
+
+        it('does not render button with favourite class if not favourite', () => {
             render(<NEOCard neo={neo} onToggleFavorite={toggleFavourite}/>)
             const buttonElement = screen.getByRole('button');
-            const computedStyle = window.getComputedStyle(buttonElement);
-            expect(computedStyle.color).toBe('gold');
+            expect(buttonElement).toBeInTheDocument();
+            expect(buttonElement).not.toHaveClass('favorite-active');
+        });
+
+        it('renders button with favourite class if favourite', () => {
+            neo['isFavorite'] = true;
+            render(<NEOCard neo={neo} onToggleFavorite={toggleFavourite}/>)
+            expect(screen.getByRole('button')).toHaveClass('favorite-active');
+        });
+
+        it('calls onToggleFavorite when button is clicked', () => {
+            render(<NEOCard neo={neo} onToggleFavorite={toggleFavourite}/>)
+            screen.getByRole('button').click();
+            expect(toggleFavourite).toHaveBeenCalledWith('1');
         });
 
     }
