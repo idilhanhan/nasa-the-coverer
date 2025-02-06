@@ -9,6 +9,7 @@ import './App.css';
 
 const App: React.FC = observer(() => {
   useEffect(() => {
+      console.log(nasaStore)
     nasaStore.fetchAPOD();
     const today = new Date().toISOString().split('T')[0];
     nasaStore.fetchNEO(today, today);
