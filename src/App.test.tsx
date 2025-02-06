@@ -43,17 +43,24 @@ describe('App Component', () => {
         expect(screen.getByText(/NASA Space Explorer/i)).toBeInTheDocument();
         expect(screen.getByText(/Astronomy Picture of the Day/i)).toBeInTheDocument();
         expect(screen.getByText(/Near Earth Objects/i)).toBeInTheDocument();
+        expect(screen.queryByText(/Loading/i)).not.toBeInTheDocument();
+        expect(screen.queryByText(/Error/i)).not.toBeInTheDocument();
     });
 
     it('does not render header if loading', () => {
         nasaStore.loading = true;
+        nasaStore.error = null;
         render(<App/>);
         expect(screen.queryByText(/NASA Space Explorer/i)).not.toBeInTheDocument();
+        expect(screen.getByText(/Loading/i)).toBeInTheDocument();
     });
 
     it('does not render header if error occurs', () => {
+        nasaStore.loading = false;
         nasaStore.error = "Error";
         render(<App/>);
         expect(screen.queryByText(/NASA Space Explorer/i)).not.toBeInTheDocument();
+        expect(screen.getByText(/Error/i)).toBeInTheDocument();
+
     });
 });
